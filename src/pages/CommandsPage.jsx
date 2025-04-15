@@ -1,7 +1,6 @@
-import { useState } from "react";
-import Button from "../components/ui/button"; 
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Leaf, Moon, Sun } from "lucide-react";
+import { Leaf, Moon, Sun, Volume2, VolumeX, X } from "lucide-react";
 import React from "react";
 
 const commands = [
@@ -13,82 +12,112 @@ const commands = [
   { name: "!elemento", description: "Guarda el bono elemental.", example: "!elemento Nahida 40%" }
 ];
 
-export default function CommandsPage() {
+const userInfo = {
+  name: "Federico Ruiz",
+  description: "Creador de Nahida Bot. Apasionado por la programación y Genshin Impact.",
+  image: "https://cdn.discordapp.com/avatars/USER_ID/AVATAR_HASH.png",
+  link: "https://discord.com/users/TU_USER_ID"
+};
+
+export default function NahidaCommandsPage() {
   const [activeCommand, setActiveCommand] = useState(null);
+  const [showUserInfo, setShowUserInfo] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const audioRef = useRef(null);
+  const explanationRef = useRef(null);
+
+  useEffect(() => {
+    if (activeCommand && explanationRef.current) {
+      explanationRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [activeCommand]);
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !muted;
+      setMuted(!muted);
+    }
+  };
 
   return (
-    <div className={`snap-y snap-mandatory h-screen w-full overflow-y-scroll ${darkMode ? 'bg-gray-900 text-white' : 'bg-green-100 text-green-900'}`}>
-      <button onClick={() => setDarkMode(!darkMode)} className="absolute top-4 right-4 p-2 rounded-full bg-gray-300 dark:bg-gray-700">
-        {darkMode ? <Sun className="text-yellow-400" /> : <Moon className="text-gray-900" />}
-      </button>
+    <div className={`snap-y snap-mandatory h-screen w-full overflow-y-scroll transition-colors duration-500 scroll-smooth relative ${darkMode ? 'bg-gray-900 text-white' : ''}`}>
+      <audio ref={audioRef} autoPlay loop>
+        <source src="https://vgmsite.com/soundtracks/genshin-impact-original-soundtrack-city-of-wisdom/zslgdiay/1-01.%20The%20Forest%20Will%20Remember.mp3" type="audio/mpeg" />
+      </audio>
 
-      <section className={`snap-start flex flex-col items-center justify-center h-screen px-10 text-center relative overflow-hidden ${darkMode ? 'bg-gray-800 text-white' : 'bg-green-200 text-green-900'}`}>
-        <motion.img 
-          src="https://imgur.com/nUxwPuE.png" 
-          alt="Nahida" 
-          className="w-64 mt-6 rounded-lg shadow-lg object-cover"
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        />
-        <h1 className="text-4xl font-bold mt-4 mb-4">Nahida Bot</h1>
-        <p className="text-lg max-w-xl">Un bot de Discord inspirado en Nahida, diseñado para gestionar builds de personajes en Genshin Impact de manera eficiente.</p>
+      <section className={`snap-start flex flex-col items-center justify-center h-screen p-10 relative overflow-hidden z-10 ${darkMode ? 'bg-gray-800 text-white' : 'bg-green-200 text-green-900'}`}>
+        <div className="text-center">
+          <h1 className="text-5xl font-bold mb-4 drop-shadow-lg">Nahida Bot</h1>
+          <p className="text-lg max-w-xl mx-auto drop-shadow-sm">Un bot de Discord inspirado en Nahida, diseñado para gestionar builds de personajes en Genshin Impact de manera eficiente.</p>
+          <motion.img
+            src="https://i.imgur.com/nUxwPuE.png"
+            alt="Nahida"
+            className="w-[600px] mt-6 mx-auto rounded-lg shadow-xl animate-float object-contain"
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8 }}
+          />
+        </div>
       </section>
 
-      <section className={`snap-start flex items-center justify-center h-screen p-10 relative ${darkMode ? 'bg-gray-700 text-white' : 'bg-green-300 text-green-900'}`}>
-        <div className="relative flex flex-row w-full max-w-6xl gap-6 items-start">
-          <div className="w-full">
-            <h2 className="text-3xl font-bold mb-6">Comandos del Bot Nahida</h2>
-            <div className="grid grid-cols-2 gap-4">
+      <section className={`snap-start flex items-center justify-center min-h-screen p-10 relative z-10 ${darkMode ? 'bg-gray-700 text-white' : 'bg-green-300 text-green-900'}`}>
+        <div className="relative flex w-full max-w-6xl gap-6">
+          <div className="w-2/3">
+            <h2 className="text-3xl font-bold mb-6 drop-shadow-md">Comandos del Bot Nahida</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {commands.map((cmd, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  whileHover={{ scale: 1.05, boxShadow: "0px 0px 15px rgba(144, 238, 144, 0.8)" }}
-                  className={`p-4 shadow-lg rounded-lg transition-all cursor-pointer flex items-start gap-3 ${darkMode ? 'bg-gray-600 hover:bg-gray-500' : 'bg-green-100 hover:bg-green-400'}`}
+                  whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(34,197,94,0.9)" }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`p-4 rounded-xl transition-all cursor-pointer flex items-center gap-3 shadow-lg hover:shadow-green-500/40 ${darkMode ? 'bg-gray-600 hover:bg-gray-500' : 'bg-green-100 hover:bg-green-300'}`}
                   onClick={() => setActiveCommand(cmd)}
                 >
                   <Leaf className={darkMode ? "text-white" : "text-green-700"} />
-                  <div>
-                    <h3 className="text-lg font-semibold">{cmd.name}</h3>
-                    <p className="text-sm">{cmd.description}</p>
+                  <div className="drop-shadow-sm">
+                    <h2 className="text-xl font-semibold">{cmd.name}</h2>
+                    <p className="text-sm opacity-90">{cmd.description}</p>
                   </div>
                 </motion.div>
               ))}
             </div>
+            {activeCommand && (
+              <motion.div
+                ref={explanationRef}
+                className="mt-10 p-6 rounded-xl shadow-2xl max-w-xl w-full flex items-center gap-4 relative bg-white/80 backdrop-blur-md border border-green-300 animate-float"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <button onClick={() => setActiveCommand(null)} className="absolute top-2 right-2 bg-red-100 hover:bg-red-300 text-red-700 rounded-full p-1">
+                  <X size={18} />
+                </button>
+                <motion.img
+                  src="https://i.imgur.com/1kdYKNs.png"
+                  alt="Nahida"
+                  className="min-w-[96px] w-24 h-24 object-cover rounded-full shadow-md border-2 border-green-400 animate-float"
+                />
+                <div className="text-gray-800">
+                  <h3 className="text-2xl font-bold mb-1">{activeCommand.name}</h3>
+                  <p className="mb-1">{activeCommand.description}</p>
+                  <p className="text-sm text-gray-600">Ejemplo: <code>{activeCommand.example}</code></p>
+                </div>
+              </motion.div>
+            )}
           </div>
-          <motion.img 
-            src="https://imgur.com/pf9MyH0.png" 
-            alt="Imagen adicional" 
-            className="w-1/3 rounded-lg shadow-lg object-cover contrast-100 opacity-90"
-            initial={{ x: 50, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
+          <motion.img
+            src="https://i.imgur.com/pf9MyH0.png"
+            alt="Nahida secundario"
+            className="w-[300px] h-auto hidden md:block rounded-lg shadow-xl animate-float object-contain"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8 }}
           />
         </div>
       </section>
-
-      {activeCommand && (
-        <section className={`snap-start flex flex-col items-center justify-center h-screen px-10 ${darkMode ? 'bg-gray-600 text-white' : 'bg-green-400 text-green-900'}`}>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className={`p-6 rounded-lg shadow-lg w-full max-w-2xl text-center ${darkMode ? 'bg-gray-500' : 'bg-green-100'}`}
-          >
-            <h2 className="text-xl font-bold flex items-center justify-center gap-2">
-              <Leaf className={darkMode ? "text-white" : "text-green-700"} /> {activeCommand.name}
-            </h2>
-            <p className="mt-2">{activeCommand.description}</p>
-            <p className="italic mt-2">Ejemplo: <code className={`p-1 rounded ${darkMode ? 'bg-gray-700' : 'bg-green-400'}`}>{activeCommand.example}</code></p>
-            <Button className={`mt-4 px-4 py-2 rounded flex items-center gap-2 transition-all ${darkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-green-500 text-white hover:bg-green-600'}`} onClick={() => setActiveCommand(null)}>
-              <Leaf className="text-white" /> Cerrar
-            </Button>
-          </motion.div>
-        </section>
-      )}
     </div>
   );
 }
