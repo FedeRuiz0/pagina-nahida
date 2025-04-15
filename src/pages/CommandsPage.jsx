@@ -12,16 +12,8 @@ const commands = [
   { name: "!elemento", description: "Guarda el bono elemental.", example: "!elemento Nahida 40%" }
 ];
 
-const userInfo = {
-  name: "Federico Ruiz",
-  description: "Creador de Nahida Bot. Apasionado por la programación y Genshin Impact.",
-  image: "https://cdn.discordapp.com/avatars/USER_ID/AVATAR_HASH.png",
-  link: "https://discord.com/users/TU_USER_ID"
-};
-
 export default function NahidaCommandsPage() {
   const [activeCommand, setActiveCommand] = useState(null);
-  const [showUserInfo, setShowUserInfo] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [muted, setMuted] = useState(false);
   const audioRef = useRef(null);
@@ -41,12 +33,13 @@ export default function NahidaCommandsPage() {
   };
 
   return (
-    <div className={`snap-y snap-mandatory h-screen w-full overflow-y-scroll transition-colors duration-500 scroll-smooth relative ${darkMode ? 'bg-gray-900 text-white' : ''}`}>
+    <div className={`min-h-screen w-full transition-colors duration-500 relative ${darkMode ? 'bg-gray-900 text-white' : ''}`}>
       <audio ref={audioRef} autoPlay loop>
         <source src="https://vgmsite.com/soundtracks/genshin-impact-original-soundtrack-city-of-wisdom/zslgdiay/1-01.%20The%20Forest%20Will%20Remember.mp3" type="audio/mpeg" />
       </audio>
 
-      <section className={`snap-start flex flex-col items-center justify-center h-screen p-10 relative overflow-hidden z-10 ${darkMode ? 'bg-gray-800 text-white' : 'bg-green-200 text-green-900'}`}>
+      {/* SECCIÓN 1: Introducción */}
+      <section className={`flex flex-col items-center justify-center min-h-[80vh] p-10 relative overflow-hidden z-10 ${darkMode ? 'bg-gray-800 text-white' : 'bg-green-200 text-green-900'}`}>
         <div className="text-center">
           <h1 className="text-5xl font-bold mb-4 drop-shadow-lg">Nahida Bot</h1>
           <p className="text-lg max-w-xl mx-auto drop-shadow-sm">Un bot de Discord inspirado en Nahida, diseñado para gestionar builds de personajes en Genshin Impact de manera eficiente.</p>
@@ -61,9 +54,11 @@ export default function NahidaCommandsPage() {
         </div>
       </section>
 
-      <section className={`snap-start flex items-center justify-center min-h-screen p-10 relative z-10 ${darkMode ? 'bg-gray-700 text-white' : 'bg-green-300 text-green-900'}`}>
-        <div className="relative flex w-full max-w-6xl gap-6">
-          <div className="w-2/3">
+      {/* SECCIÓN 2: Comandos */}
+      <section className={`flex items-center justify-center min-h-[90vh] p-10 relative z-10 ${darkMode ? 'bg-gray-700 text-white' : 'bg-green-300 text-green-900'}`}>
+        <div className="relative flex flex-wrap w-full max-w-6xl gap-6">
+          {/* Lista de Comandos */}
+          <div className="w-full md:w-2/3">
             <h2 className="text-3xl font-bold mb-6 drop-shadow-md">Comandos del Bot Nahida</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {commands.map((cmd, index) => (
@@ -84,6 +79,8 @@ export default function NahidaCommandsPage() {
                 </motion.div>
               ))}
             </div>
+
+            {/* Detalle del Comando Seleccionado */}
             {activeCommand && (
               <motion.div
                 ref={explanationRef}
@@ -108,6 +105,8 @@ export default function NahidaCommandsPage() {
               </motion.div>
             )}
           </div>
+
+          {/* Imagen a la derecha */}
           <motion.img
             src="https://i.imgur.com/pf9MyH0.png"
             alt="Nahida secundario"
