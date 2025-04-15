@@ -8,7 +8,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
     clean: true,
-    publicPath: '/', // Para React Router
+    publicPath: '/pagina-nahida/', // Para React Router
   },
   resolve: {
     alias: {
