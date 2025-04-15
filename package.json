@@ -1,4 +1,5 @@
 {
+"homepage": "https://FedeRuiz0.github.io/pagina-nahida",
   "name": "pagina-nahida",
   "version": "0.1.0",
   "private": true,
@@ -14,6 +15,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+"predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "webpack serve --mode development",
     "build": "webpack --mode production"
   },
